@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SelemExpress e-Stock MVP Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'selem-primary': '#2563eb',
+                        'selem-secondary': '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Welcome Screen with Role Selection -->
+    <div id="welcome-screen" class="min-h-screen flex flex-col items-center justify-center p-6">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-selem-primary mb-3">SelemExpress</h1>
+            <p class="text-xl text-gray-600">e-Stock MVP Prototype</p>
+            <p class="text-sm text-gray-500 mt-2">Visual UI Mockup - Not a working system</p>
+        </div>
+
+        <div class="space-y-4 w-full max-w-md">
+            <!-- Shop Owner Login -->
+            <button onclick="showScreen('shop-owner-dashboard')" 
+                    class="w-full bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow border-2 border-transparent hover:border-selem-primary">
+                <div class="flex items-center justify-between">
+                    <div class="text-left">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                            <i class="fas fa-store mr-3 text-selem-primary"></i>Shop Owner
+                        </h2>
+                        <p class="text-gray-600">Mobile Dashboard</p>
+                        <p class="text-sm text-gray-500 mt-1">View models, confirm orders</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-2xl text-gray-400"></i>
+                </div>
+            </button>
+
+            <!-- Selem Admin Login -->
+            <button onclick="showScreen('admin-dashboard')" 
+                    class="w-full bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow border-2 border-transparent hover:border-selem-secondary">
+                <div class="flex items-center justify-between">
+                    <div class="text-left">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                            <i class="fas fa-user-shield mr-3 text-selem-secondary"></i>Selem Admin
+                        </h2>
+                        <p class="text-gray-600">Admin Panel</p>
+                        <p class="text-sm text-gray-500 mt-1">Upload models, manage shops</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-2xl text-gray-400"></i>
+                </div>
+            </button>
+
+            <!-- QR Scanner Access -->
+            <button onclick="showScreen('qr-scanner')" 
+                    class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-qrcode text-3xl mr-3"></i>
+                    <span class="text-xl font-bold">QR Code Scanner</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="mt-12 text-center">
+            <p class="text-gray-500 text-sm">
+                <i class="fas fa-info-circle mr-1"></i>
+                This is a visual prototype to refine UI before development
+            </p>
+        </div>
+    </div>
+
+    <!-- Shop Owner Dashboard -->
+    <div id="shop-owner-dashboard" class="hidden min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-selem-primary text-white p-6 shadow-lg">
+            <button onclick="showScreen('welcome-screen')" class="mb-4">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold">My Shop Dashboard</h1>
+            <p class="text-blue-100 mt-1">Chaussures Mohamed - Week of April 7</p>
+        </div>
+
+        <div class="p-6 space-y-6">
+            <!-- This Week's Models (3 Cards) -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-box-open mr-2"></i>This Week's Models (3)
+                </h2>
+                
+                <!-- Model Card 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-4">
+                    <div class="h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                        <i class="fas fa-shoe-prints text-6xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-800">Nike Air Max 2024</h3>
+                        <p class="text-sm text-gray-600 mb-2">Size: 38-44 • Price: 180 TND</p>
+                        <div class="flex items-center justify-between mb-4 p-3 bg-blue-50 rounded-lg">
+                            <span class="text-gray-700 font-semibold">Stock Available:</span>
+                            <span class="text-3xl font-bold text-selem-primary" id="stock-1">12</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="updateStock(1)" class="bg-selem-primary text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition">
+                                <i class="fas fa-edit mr-2"></i>Update Stock
+                            </button>
+                            <button onclick="soldInStore(1)" class="bg-orange-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-orange-600 transition">
+                                <i class="fas fa-shopping-bag mr-2"></i>Sold in Store
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Card 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-4">
+                    <div class="h-48 bg-gradient-to-br from-red-200 to-pink-300 flex items-center justify-center">
+                        <i class="fas fa-shoe-prints text-6xl text-red-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-800">Adidas Ultraboost</h3>
+                        <p class="text-sm text-gray-600 mb-2">Size: 39-45 • Price: 220 TND</p>
+                        <div class="flex items-center justify-between mb-4 p-3 bg-blue-50 rounded-lg">
+                            <span class="text-gray-700 font-semibold">Stock Available:</span>
+                            <span class="text-3xl font-bold text-selem-primary" id="stock-2">8</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="updateStock(2)" class="bg-selem-primary text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition">
+                                <i class="fas fa-edit mr-2"></i>Update Stock
+                            </button>
+                            <button onclick="soldInStore(2)" class="bg-orange-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-orange-600 transition">
+                                <i class="fas fa-shopping-bag mr-2"></i>Sold in Store
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Card 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-4">
+                    <div class="h-48 bg-gradient-to-br from-green-200 to-blue-300 flex items-center justify-center">
+                        <i class="fas fa-shoe-prints text-6xl text-green-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-800">Puma RS-X Elite</h3>
+                        <p class="text-sm text-gray-600 mb-2">Size: 40-46 • Price: 150 TND</p>
+                        <div class="flex items-center justify-between mb-4 p-3 bg-blue-50 rounded-lg">
+                            <span class="text-gray-700 font-semibold">Stock Available:</span>
+                            <span class="text-3xl font-bold text-selem-primary" id="stock-3">15</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="updateStock(3)" class="bg-selem-primary text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition">
+                                <i class="fas fa-edit mr-2"></i>Update Stock
+                            </button>
+                            <button onclick="soldInStore(3)" class="bg-orange-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-orange-600 transition">
+                                <i class="fas fa-shopping-bag mr-2"></i>Sold in Store
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Online Orders -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-clock mr-2 text-yellow-500"></i>Pending Online Orders
+                    <span class="bg-red-500 text-white text-sm px-3 py-1 rounded-full ml-2" id="pending-count">2</span>
+                </h2>
+                
+                <div id="pending-orders" class="space-y-4">
+                    <!-- Order 1 -->
+                    <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-yellow-400" data-order-id="1">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-lg">Nike Air Max 2024</h3>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <i class="fas fa-user mr-1"></i>Ahmed Ben Ali
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <i class="fas fa-phone mr-1"></i>+216 98 765 432
+                                </p>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">PENDING</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg">
+                            <span class="text-gray-700">Quantity:</span>
+                            <span class="text-2xl font-bold text-gray-800">1 pair</span>
+                        </div>
+                        <button onclick="confirmOrder(1, 1)" class="w-full bg-selem-secondary text-white py-5 rounded-lg font-bold text-xl hover:bg-green-600 transition shadow-lg">
+                            <i class="fas fa-check-circle mr-2"></i>Confirm & Reserve
+                        </button>
+                    </div>
+
+                    <!-- Order 2 -->
+                    <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-yellow-400" data-order-id="2">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-lg">Adidas Ultraboost</h3>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <i class="fas fa-user mr-1"></i>Fatma Trabelsi
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <i class="fas fa-phone mr-1"></i>+216 22 123 456
+                                </p>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">PENDING</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg">
+                            <span class="text-gray-700">Quantity:</span>
+                            <span class="text-2xl font-bold text-gray-800">1 pair</span>
+                        </div>
+                        <button onclick="confirmOrder(2, 2)" class="w-full bg-selem-secondary text-white py-5 rounded-lg font-bold text-xl hover:bg-green-600 transition shadow-lg">
+                            <i class="fas fa-check-circle mr-2"></i>Confirm & Reserve
+                        </button>
+                    </div>
+                </div>
+
+                <div id="no-orders" class="hidden bg-white rounded-xl shadow-md p-8 text-center">
+                    <i class="fas fa-check-circle text-6xl text-green-400 mb-4"></i>
+                    <p class="text-gray-600 text-lg">No pending orders</p>
+                </div>
+            </div>
+
+            <!-- QR Scanner Quick Access -->
+            <button onclick="showScreen('qr-scanner')" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-6 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition">
+                <i class="fas fa-qrcode mr-2"></i>Open QR Scanner
+            </button>
+        </div>
+    </div>
+
+    <!-- Selem Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-selem-secondary text-white p-6 shadow-lg">
+            <button onclick="showScreen('welcome-screen')" class="mb-4">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold">Selem Admin Panel</h1>
+            <p class="text-green-100 mt-1">Manage Weekly Models</p>
+        </div>
+
+        <div class="p-6">
+            <!-- Shop Selection -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <label class="block text-gray-700 font-bold mb-3 text-lg">
+                    <i class="fas fa-store mr-2"></i>Select Shop
+                </label>
+                <select id="shop-select" class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-selem-secondary focus:outline-none">
+                    <option>Chaussures Mohamed - Tunis</option>
+                    <option>Shoes Paradise - Sfax</option>
+                    <option>FootWear Pro - Sousse</option>
+                </select>
+            </div>
+
+            <!-- Week Info -->
+            <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Current Week</p>
+                        <p class="text-2xl font-bold">April 7 - April 13, 2026</p>
+                    </div>
+                    <i class="fas fa-calendar-week text-4xl opacity-75"></i>
+                </div>
+            </div>
+
+            <!-- Upload 3 Models Section -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-upload mr-2"></i>Upload This Week's 3 Models
+                </h2>
+
+                <!-- Model Upload Form 1 -->
+                <div class="bg-white rounded-xl shadow-md p-5 mb-4" id="model-form-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-gray-800">
+                            <span class="bg-selem-secondary text-white w-8 h-8 rounded-full inline-flex items-center justify-center mr-2">1</span>
+                            Model 1
+                        </h3>
+                        <span class="text-sm text-green-600 font-semibold hidden" id="saved-1">
+                            <i class="fas fa-check-circle mr-1"></i>Saved
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Model Name</label>
+                            <input type="text" id="name-1" placeholder="e.g., Nike Air Max 2024" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Brand</label>
+                                <input type="text" id="brand-1" placeholder="Nike" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Price (TND)</label>
+                                <input type="number" id="price-1" placeholder="180" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Initial Stock</label>
+                            <input type="number" id="initial-stock-1" placeholder="12" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-camera mr-1"></i>Professional Photos
+                            </label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-selem-secondary transition cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">Click to upload or drag photos here</p>
+                                <p class="text-sm text-gray-500 mt-1">Multiple photos allowed</p>
+                            </div>
+                        </div>
+
+                        <button onclick="saveModel(1)" class="w-full bg-selem-secondary text-white py-4 rounded-lg font-bold text-lg hover:bg-green-600 transition">
+                            <i class="fas fa-save mr-2"></i>Save Model 1
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Model Upload Form 2 -->
+                <div class="bg-white rounded-xl shadow-md p-5 mb-4" id="model-form-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-gray-800">
+                            <span class="bg-selem-secondary text-white w-8 h-8 rounded-full inline-flex items-center justify-center mr-2">2</span>
+                            Model 2
+                        </h3>
+                        <span class="text-sm text-green-600 font-semibold hidden" id="saved-2">
+                            <i class="fas fa-check-circle mr-1"></i>Saved
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Model Name</label>
+                            <input type="text" id="name-2" placeholder="e.g., Adidas Ultraboost" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Brand</label>
+                                <input type="text" id="brand-2" placeholder="Adidas" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Price (TND)</label>
+                                <input type="number" id="price-2" placeholder="220" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Initial Stock</label>
+                            <input type="number" id="initial-stock-2" placeholder="8" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-camera mr-1"></i>Professional Photos
+                            </label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-selem-secondary transition cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">Click to upload or drag photos here</p>
+                                <p class="text-sm text-gray-500 mt-1">Multiple photos allowed</p>
+                            </div>
+                        </div>
+
+                        <button onclick="saveModel(2)" class="w-full bg-selem-secondary text-white py-4 rounded-lg font-bold text-lg hover:bg-green-600 transition">
+                            <i class="fas fa-save mr-2"></i>Save Model 2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Model Upload Form 3 -->
+                <div class="bg-white rounded-xl shadow-md p-5 mb-6" id="model-form-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-gray-800">
+                            <span class="bg-selem-secondary text-white w-8 h-8 rounded-full inline-flex items-center justify-center mr-2">3</span>
+                            Model 3
+                        </h3>
+                        <span class="text-sm text-green-600 font-semibold hidden" id="saved-3">
+                            <i class="fas fa-check-circle mr-1"></i>Saved
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Model Name</label>
+                            <input type="text" id="name-3" placeholder="e.g., Puma RS-X Elite" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Brand</label>
+                                <input type="text" id="brand-3" placeholder="Puma" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Price (TND)</label>
+                                <input type="number" id="price-3" placeholder="150" 
+                                       class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Initial Stock</label>
+                            <input type="number" id="initial-stock-3" placeholder="15" 
+                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-selem-secondary focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-camera mr-1"></i>Professional Photos
+                            </label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-selem-secondary transition cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">Click to upload or drag photos here</p>
+                                <p class="text-sm text-gray-500 mt-1">Multiple photos allowed</p>
+                            </div>
+                        </div>
+
+                        <button onclick="saveModel(3)" class="w-full bg-selem-secondary text-white py-4 rounded-lg font-bold text-lg hover:bg-green-600 transition">
+                            <i class="fas fa-save mr-2"></i>Save Model 3
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Publish All Button -->
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-lg p-6 text-center" id="publish-section">
+                    <p class="text-white text-lg mb-4">
+                        <i class="fas fa-info-circle mr-2"></i>Save all 3 models to publish to shop
+                    </p>
+                    <button onclick="publishModels()" class="bg-white text-purple-600 py-5 px-8 rounded-lg font-bold text-xl hover:bg-gray-100 transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" id="publish-btn" disabled>
+                        <i class="fas fa-rocket mr-2"></i>Publish Week Models
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Scanner Screen -->
+    <div id="qr-scanner" class="hidden min-h-screen bg-gray-900">
+        <!-- Header -->
+        <div class="bg-gray-800 text-white p-6 shadow-lg">
+            <button onclick="showScreen('shop-owner-dashboard')" class="mb-4">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold">QR Code Scanner</h1>
+            <p class="text-gray-300 mt-1">Scan model QR code to update stock</p>
+        </div>
+
+        <!-- Scanner Area -->
+        <div class="p-6">
+            <!-- Camera View Simulation -->
+            <div class="bg-black rounded-xl overflow-hidden mb-6 relative" style="height: 400px;">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="border-4 border-white rounded-lg" style="width: 250px; height: 250px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <i class="fas fa-qrcode text-white text-6xl animate-pulse"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold">
+                    <i class="fas fa-camera mr-2"></i>Position QR code in frame
+                </div>
+            </div>
+
+            <!-- Scan Simulation Buttons -->
+            <div class="space-y-3 mb-6">
+                <p class="text-white text-center text-sm mb-4">
+                    <i class="fas fa-info-circle mr-1"></i>Simulate scanning a model QR code
+                </p>
+                <button onclick="simulateScan('Nike Air Max 2024', 1)" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:shadow-xl transition">
+                    Scan: Nike Air Max 2024
+                </button>
+                <button onclick="simulateScan('Adidas Ultraboost', 2)" class="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-4 rounded-lg font-bold text-lg hover:shadow-xl transition">
+                    Scan: Adidas Ultraboost
+                </button>
+                <button onclick="simulateScan('Puma RS-X Elite', 3)" class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:shadow-xl transition">
+                    Scan: Puma RS-X Elite
+                </button>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-gray-800 rounded-xl p-6 text-white">
+                <h3 class="font-bold text-lg mb-3">
+                    <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>How to Use
+                </h3>
+                <ol class="space-y-2 text-sm text-gray-300">
+                    <li><span class="font-bold text-white">1.</span> Point camera at model's QR code sticker</li>
+                    <li><span class="font-bold text-white">2.</span> Wait for automatic detection</li>
+                    <li><span class="font-bold text-white">3.</span> Confirm stock deduction with one tap</li>
+                    <li><span class="font-bold text-white">4.</span> Done! Stock updated instantly</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Scan Result Modal -->
+    <div id="scan-result-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-6 z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full">
+            <div class="text-center mb-6">
+                <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-4xl text-green-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">QR Code Detected!</h3>
+                <p class="text-gray-600" id="scanned-model-name">Nike Air Max 2024</p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-gray-700 font-semibold">Current Stock:</span>
+                    <span class="text-3xl font-bold text-selem-primary" id="current-stock-qr">12</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700 font-semibold">After Sale:</span>
+                    <span class="text-3xl font-bold text-green-600" id="new-stock-qr">11</span>
+                </div>
+            </div>
+
+            <button onclick="confirmQRSale()" class="w-full bg-orange-500 text-white py-5 rounded-lg font-bold text-xl hover:bg-orange-600 transition mb-3">
+                <i class="fas fa-shopping-bag mr-2"></i>Confirm Sale (-1)
+            </button>
+            <button onclick="closeModal()" class="w-full bg-gray-300 text-gray-700 py-4 rounded-lg font-bold text-lg hover:bg-gray-400 transition">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="success-toast" class="hidden fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-4 rounded-lg shadow-xl z-50 animate-bounce">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Action completed successfully!</span>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
